@@ -1,0 +1,4 @@
+inherit mono gnome2
+
+DESCRIPTION="GNOME photo management application"
+HOMEPAGE="http://f-spot.org/"
