@@ -1,0 +1,132 @@
+--- origsrc/f-spot-0.6.1.5/lib/gio-sharp/gio/gio-sharp.dll.config	2009-08-10 06:41:20.000000000 -0500
++++ src/f-spot-0.6.1.5/lib/gio-sharp/gio/gio-sharp.dll.config	2009-12-08 15:34:58.031877400 -0600
+@@ -1,6 +1,6 @@
+ <configuration>
+-  <dllmap dll="libgio-2.0-0.dll" target="libgio-2.0.so.0"/>
+-  <dllmap dll="libglib-2.0-0.dll" target="libglib-2.0.so.0"/>
+-  <dllmap dll="libgobject-2.0-0.dll" target="libgobject-2.0.so.0"/>
+-  <dllmap dll="libgthread-2.0-0.dll" target="libgthread-2.0.so.0"/>
++  <dllmap dll="libgio-2.0-0.dll" target="cyggio-2.0-0.dll"/>
++  <dllmap dll="libglib-2.0-0.dll" target="cygglib-2.0-0.dll"/>
++  <dllmap dll="libgobject-2.0-0.dll" target="cyggobject-2.0-0.dll"/>
++  <dllmap dll="libgthread-2.0-0.dll" target="cyggthread-2.0-0.dll"/>
+ </configuration>
+--- origsrc/f-spot-0.6.1.5/lib/gtk-sharp-beans/gtk-sharp-beans.dll.config	2009-08-10 06:41:20.000000000 -0500
++++ src/f-spot-0.6.1.5/lib/gtk-sharp-beans/gtk-sharp-beans.dll.config	2009-12-08 15:35:07.313893500 -0600
+@@ -1,8 +1,8 @@
+ <configuration>
+-  <dllmap dll="libglib-2.0-0.dll" target="libglib-2.0.so.0"/>
+-  <dllmap dll="libgobject-2.0-0.dll" target="libgobject-2.0.so.0"/>
+-  <dllmap dll="libatk-1.0-0.dll" target="libatk-1.0.so.0"/>
+-  <dllmap dll="libgtk-win32-2.0-0.dll" target="libgtk-x11-2.0.so.0"/>
+-  <dllmap dll="libgdk-win32-2.0-0.dll" target="libgdk-x11-2.0.so.0"/>
+-  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="libgdk_pixbuf-2.0.so.0"/>
++  <dllmap dll="libglib-2.0-0.dll" target="cygglib-2.0-0.dll"/>
++  <dllmap dll="libgobject-2.0-0.dll" target="cyggobject-2.0-0.dll"/>
++  <dllmap dll="libatk-1.0-0.dll" target="cygatk-1.0-0.dll"/>
++  <dllmap dll="libgtk-win32-2.0-0.dll" target="cyggtk-x11-2.0-0.dll"/>
++  <dllmap dll="libgdk-win32-2.0-0.dll" target="cyggdk-x11-2.0-0.dll"/>
++  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="cyggdk_pixbuf-2.0-0.dll"/>
+ </configuration>
+--- origsrc/f-spot-0.6.1.5/lib/libfspot/Makefile.am	2009-08-10 06:41:20.000000000 -0500
++++ src/f-spot-0.6.1.5/lib/libfspot/Makefile.am	2009-12-08 14:33:51.134484000 -0600
+@@ -31,11 +31,14 @@ libfspot_la_SOURCES =				\
+ 	f-utils.h
+ 
+ libfspot_la_LIBADD = 					\
++	$(F_LIBS)						\
+ 	$(LCMS_LIBS)					\
+ 	$(EXIF_LIBS)					\
+ 	$(GIO_LIBS)					\
+ 	$(top_builddir)/lib/libjpegtran/libfspotjpegtran.la	
+ 
++libfspot_la_LDFLAGS = -module -avoid-version -no-undefined
++
+ 
+ # GLib marshalling cruft
+ 
+--- origsrc/f-spot-0.6.1.5/lib/libgphoto2-sharp/libgphoto2-sharp.dll.config	2009-11-04 13:34:32.000000000 -0600
++++ src/f-spot-0.6.1.5/lib/libgphoto2-sharp/libgphoto2-sharp.dll.config	2009-12-08 15:35:21.291517900 -0600
+@@ -1,4 +1,4 @@
+ <configuration>
+-  <dllmap dll="libgphoto2.so" target="libgphoto2.so.2"/>
+-  <dllmap dll="libgphoto2_port.so" target="libgphoto2_port.so.0"/>
++  <dllmap dll="libgphoto2.so" target="cyggphoto2-2.dll"/>
++  <dllmap dll="libgphoto2_port.so" target="cyggphoto2_port-0.dll"/>
+ </configuration>
+--- origsrc/f-spot-0.6.1.5/lib/libjpegtran/Makefile.am	2009-08-10 06:41:20.000000000 -0500
++++ src/f-spot-0.6.1.5/lib/libjpegtran/Makefile.am	2009-12-08 14:34:08.356914000 -0600
+@@ -18,5 +18,8 @@ libfspotjpegtran_files =			\
+ libfspotjpegtran_la_SOURCES =			\
+ 	$(libfspotjpegtran_files)
+ 
++libfspotjpegtran_la_LDFLAGS = -module -avoid-version -no-undefined
++libfspotjpegtran_la_LIBADD  = $(LIBJPEG) $(EXIF_LIBS)
++
+ 
+ EXTRA_DIST = README
+--- origsrc/f-spot-0.6.1.5/src/Cms.dll.config.in	2009-05-02 07:15:48.000000000 -0500
++++ src/f-spot-0.6.1.5/src/Cms.dll.config.in	2009-12-08 14:38:45.912597900 -0600
+@@ -1,5 +1,5 @@
+ <configuration>
+-  <dllmap dll="liblcms-1.0.0.dll" target="liblcms.so.1"/>
+-  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/libfspot.so.0"/>
++  <dllmap dll="liblcms-1.0.0.dll" target="cyglcms-1.dll"/>
++  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/cygfspot.dll"/>
+ </configuration>
+ 
+--- origsrc/f-spot-0.6.1.5/src/FSpot.Utils.dll.config	2009-08-11 10:08:31.000000000 -0500
++++ src/f-spot-0.6.1.5/src/FSpot.Utils.dll.config	2009-12-08 15:35:39.824350200 -0600
+@@ -1,5 +1,5 @@
+ <configuration>
+-  <dllmap dll="libgdk-2.0-0.dll" target="libgdk-x11-2.0.so.0"/>
+-  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="libgdk_pixbuf-2.0.so.0"/>
+-  <dllmap dll="X11" target="libX11.so.6"/>
++  <dllmap dll="libgdk-2.0-0.dll" target="cyggdk-x11-2.0-0.dll"/>
++  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="cyggdk_pixbuf-2.0-0.dll"/>
++  <dllmap dll="X11" target="cygX11-6.dll"/>
+ </configuration>
+--- origsrc/f-spot-0.6.1.5/src/FSpot.Widgets.dll.config.in	2009-07-09 09:03:29.000000000 -0500
++++ src/f-spot-0.6.1.5/src/FSpot.Widgets.dll.config.in	2009-12-08 14:42:00.149536700 -0600
+@@ -1,5 +1,5 @@
+ <configuration>
+-  <dllmap dll="libgobject-2.0-0.dll" target="libgobject-2.0.so.0"/>
+-  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/libfspot.so.0"/>
+-  <dllmap dll="libfspotjpeg" target="@expanded_libdir@/f-spot/libfspotjpg.so.0"/>
++  <dllmap dll="libgobject-2.0-0.dll" target="cyggobject-2.0-0.dll"/>
++  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/cygfspot.dll"/>
++  <dllmap dll="libfspotjpeg" target="@expanded_libdir@/f-spot/cygfspotjpg.dll"/>
+ </configuration>
+--- origsrc/f-spot-0.6.1.5/src/f-spot.exe.config.in	2009-07-09 09:03:30.000000000 -0500
++++ src/f-spot-0.6.1.5/src/f-spot.exe.config.in	2009-12-08 14:40:33.131584900 -0600
+@@ -1,16 +1,16 @@
+ <configuration>
+-  <dllmap dll="libglib-2.0-0.dll" target="libglib-2.0.so.0"/>
+-  <dllmap dll="libgobject-2.0-0.dll" target="libgobject-2.0.so.0"/>
+-  <dllmap dll="libgtk-win32-2.0-0.dll" target="libgtk-x11-2.0.so.0"/>
+-  <dllmap dll="libgdk-2.0-0.dll" target="libgdk-x11-2.0.so.0"/>
+-  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="libgdk_pixbuf-2.0.so.0"/>
+-  <dllmap dll="libgnomevfs-2-0.dll" target="libgnomevfs-2.so.0"/>
+-  <dllmap dll="libgnomeui-2-0.dll" target="libgnomeui-2.so.0"/>
+-  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/libfspot.so.0"/>
+-  <dllmap dll="libfspotjpeg" target="@expanded_libdir@/f-spot/libfspotjpg.so.0"/>
+-  <dllmap dll="X11" target="libX11.so.6"/>
+-  <dllmap dll="GL" target="libGL.so.1"/>
+-  <dllmap dll="libXcomposite.dll" target="libXcomposite.so.1"/>
+-  <dllmap dll="liblcms-1.0.0.dll" target="liblcms.so.1"/>
+-  <dllmap dll="libexif.dll" target="libexif.so.@EXIF_SOVERSION@"/>
++  <dllmap dll="libglib-2.0-0.dll" target="cygglib-2.0-0.dll"/>
++  <dllmap dll="libgobject-2.0-0.dll" target="cyggobject-2.0-0.dll"/>
++  <dllmap dll="libgtk-win32-2.0-0.dll" target="cyggtk-x11-2.0-0.dll"/>
++  <dllmap dll="libgdk-2.0-0.dll" target="cyggdk-x11-2.0-0.dll"/>
++  <dllmap dll="libgdk_pixbuf-2.0-0.dll" target="cyggdk_pixbuf-2.0-0.dll"/>
++  <dllmap dll="libgnomevfs-2-0.dll" target="cyggnomevfs-2-0.dll"/>
++  <dllmap dll="libgnomeui-2-0.dll" target="cyggnomeui-2-0.dll"/>
++  <dllmap dll="libfspot" target="@expanded_libdir@/f-spot/cygfspot.dll"/>
++  <dllmap dll="libfspotjpeg" target="@expanded_libdir@/f-spot/cygfspotjpg.dll"/>
++  <dllmap dll="X11" target="cygX11-6.dll"/>
++  <dllmap dll="GL" target="cygGL-1.dll"/>
++  <dllmap dll="libXcomposite.dll" target="cygXcomposite-1.dll"/>
++  <dllmap dll="liblcms-1.0.0.dll" target="cyglcms-1.dll"/>
++  <dllmap dll="libexif.dll" target="cygexif-12.dll"/>
+ </configuration>
